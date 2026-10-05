@@ -89,7 +89,7 @@ export default function HeroSection() {
         >
           <Sparkles size={16} color="#ffd700" />
           <span style={{ color: '#ffd700', fontSize: '0.85rem', fontWeight: '600', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-            THE ANTIGRAVITY LEADER
+            ISLAMIC HEAD
           </span>
         </motion.div>
 
