@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Irshad Shamil Irfani | Educational Leader & Islamic Speaker</title>
+  <meta name="description" content="Official single-page portfolio of Irshad Shamil Irfani - Principal & Director, Educational Leader, and Islamic Speaker inspiring visionary education and community elevation." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome & Lucide CDN for crisp icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #060a17;
+      --bg-card: rgba(15, 23, 42, 0.68);
+      --bg-card-hover: rgba(30, 41, 59, 0.85);
+      --gold-primary: #f5a623;
+      --gold-light: #ffd700;
+      --gold-glow: rgba(245, 166, 35, 0.35);
+      --blue-primary: #1e90ff;
+      --blue-light: #60a5fa;
+      --blue-glow: rgba(30, 144, 255, 0.35);
+      --cyan-glow: rgba(6, 182, 212, 0.35);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-arabic: 'Amiri', serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      overflow-x: hidden;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* 3D Canvas Background */
+    #canvas-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #060a17;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+      border: 1px solid rgba(245, 166, 35, 0.25);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(245, 166, 35, 0.6);
+    }
+
+    /* Typography & Utilities */
+    .font-serif {
+      font-family: var(--font-serif);
+    }
+    .font-arabic {
+      font-family: var(--font-arabic);
+    }
+
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #ffd700 40%, #f5a623 75%, #c28616 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .blue-gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #60a5fa 50%, #1e90ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Glassmorphism */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(245, 166, 35, 0.45);
+      box-shadow: 0 25px 65px rgba(245, 166, 35, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .glass-nav {
+      background: rgba(6, 10, 23, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    /* Navigation Bar */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 1.25rem 2rem;
+      transition: all 0.4s ease;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(245, 166, 35, 0.25);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .brand-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f5a623, #1e90ff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #060a17;
+      font-weight: 800;
+      font-size: 1.1rem;
+      box-shadow: 0 0 15px rgba(245, 166, 35, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffd700;
+    }
+
+    /* Buttons */
+    .btn-antigravity {
+      position: relative;
+      background: linear-gradient(135deg, #f5a623, #1e90ff);
+      color: #060a17;
+      font-weight: 700;
+      border-radius: 9999px;
+      box-shadow: 0 0 25px rgba(245, 166, 35, 0.4);
+      transition: all 0.35s ease;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-antigravity:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 0 35px rgba(30, 144, 255, 0.6), 0 0 50px rgba(245, 166, 35, 0.5);
+    }
+
+    /* Hero Section */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 1.5rem 4rem 1.5rem;
+      z-index: 1;
+    }
+
+    .hero-content {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .antigravity-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.5rem 1.3rem;
+      border-radius: 9999px;
+      background: rgba(245, 166, 35, 0.12);
+      border: 1px solid rgba(245, 166, 35, 0.35);
+      backdrop-filter: blur(10px);
+      margin-bottom: 2rem;
+      color: #ffd700;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      animation: floatBadge 4s ease-in-out infinite;
+    }
+
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.01em;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.8);
+    }
+
+    .hero-subtitles {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .subtitle-item {
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    /* Key Metrics Bar */
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 4.5rem;
+      padding: 1.75rem;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(245, 166, 35, 0.25);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    /* Section Styling */
+    section {
+      position: relative;
+      padding: 6rem 1.5rem;
+      max-width: 1280px;
+      margin: 0 auto;
+      z-index: 2;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    /* 3D Portrait Frame */
+    .portrait-card-wrapper {
+      perspective: 1000px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .portrait-card {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      height: 520px;
+      border-radius: 28px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+      transition: transform 0.2s ease-out;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      top: -6%;
+      left: -6%;
+      right: -6%;
+      bottom: -6%;
+      border-radius: 50%;
+      border: 2px dashed rgba(245, 166, 35, 0.45);
+      pointer-events: none;
+      z-index: 1;
+      animation: spinRing 25s linear infinite;
+    }
+
+    @keyframes spinRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .portrait-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 2px solid rgba(245, 166, 35, 0.35);
+      background: #0c1222;
+      z-index: 2;
+    }
+
+    .portrait-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: contrast(1.05) brightness(1.02);
+      transition: transform 0.5s ease;
+    }
+
+    .portrait-card:hover .portrait-img {
+      transform: scale(1.04);
+    }
+
+    .portrait-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(6, 10, 23, 0.95) 0%, rgba(6, 10, 23, 0.15) 50%, transparent 100%);
+    }
+
+    .portrait-badge {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      padding: 1.25rem;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    /* Holographic Skills Grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .skill-card {
+      padding: 2rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-10px) scale(1.02);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(6, 10, 23, 0.88);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 640px;
+      padding: 2.5rem;
+      position: relative;
+      border-radius: 24px;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-backdrop.active .modal-content {
+      transform: translateY(0);
+    }
+
+    /* Languages Grid */
+    .languages-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .lang-badge {
+      padding: 1.75rem;
+      border-radius: 24px;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(15, 23, 42, 0.5);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .lang-badge.active {
+      border: 2px solid #f5a623;
+      background: rgba(30, 41, 59, 0.9);
+      box-shadow: 0 0 30px rgba(245, 166, 35, 0.35);
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 5rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      background: rgba(6, 10, 23, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      border-radius: 24px;
+      padding: 1.5rem;
+      flex-direction: column;
+      gap: 1rem;
+      z-index: 49;
+    }
+
+    .mobile-menu.active {
+      display: flex;
+    }
+
+    .mobile-toggle-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .mobile-toggle-btn { display: block; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Canvas Background -->
+  <div id="canvas-container"></div>
+
+  <!-- Header / Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo">
+        <div class="brand-avatar">ISI</div>
+        <div>
+          <div style="color: #fff; font-weight: 700; font-size: 1rem; line-height: 1.2;">IRSHAD SHAMIL</div>
+          <div style="color: #f5a623; font-size: 0.7rem; letter-spacing: 0.15em; font-weight: 600;">ANTIGRAVITY LEADER</div>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#hero"><i class="fa-solid fa-compass" style="color:#f5a623;"></i> Ascent</a></li>
+        <li><a href="#profile"><i class="fa-solid fa-user" style="color:#1e90ff;"></i> Vision</a></li>
+        <li><a href="#skills"><i class="fa-solid fa-award" style="color:#ffd700;"></i> Leadership</a></li>
+        <li><a href="#languages"><i class="fa-solid fa-globe" style="color:#06b6d4;"></i> Global</a></li>
+        <li><a href="#contact"><i class="fa-solid fa-envelope" style="color:#ec4899;"></i> Contact</a></li>
+      </ul>
+
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="#contact" class="btn-antigravity nav-cta" style="padding: 0.6rem 1.4rem; font-size: 0.85rem;">Connect</a>
+        <button class="mobile-toggle-btn" id="mobile-toggle" aria-label="Toggle Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#hero" style="color: #fff; text-decoration: none; padding: 0.5rem; font-weight: 600;"><i class="fa-solid fa-compass" style="color:#f5a623;"></i> Ascent</a>
+      <a href="#profile" style="color: #fff; text-decoration: none; padding: 0.5rem; font-weight: 600;"><i class="fa-solid fa-user" style="color:#1e90ff;"></i> Vision</a>
+      <a href="#skills" style="color: #fff; text-decoration: none; padding: 0.5rem; font-weight: 600;"><i class="fa-solid fa-award" style="color:#ffd700;"></i> Leadership</a>
+      <a href="#languages" style="color: #fff; text-decoration: none; padding: 0.5rem; font-weight: 600;"><i class="fa-solid fa-globe" style="color:#06b6d4;"></i> Global</a>
+      <a href="#contact" style="color: #fff; text-decoration: none; padding: 0.5rem; font-weight: 600;"><i class="fa-solid fa-envelope" style="color:#ec4899;"></i> Contact</a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="hero-content">
+      <div class="antigravity-badge">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>THE ANTIGRAVITY LEADER</span>
+      </div>
+
+      <h1 class="font-serif gold-gradient-text hero-title">
+        IRSHAD SHAMIL IRFANI
+      </h1>
+
+      <div class="hero-subtitles">
+        <span class="subtitle-item blue-gradient-text">PRINCIPAL & DIRECTOR</span>
+        <span style="color: #f5a623; font-size: 1.2rem;">•</span>
+        <span class="subtitle-item" style="color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);">ISLAMIC SPEAKER</span>
+      </div>
+
+      <p style="font-size: clamp(1rem, 1.8vw, 1.25rem); color: #94a3b8; max-width: 720px; margin: 0 auto 2.5rem auto; line-height: 1.7;">
+        Elevating minds, inspiring hearts, and shaping future generations through visionary educational leadership, moral guidance, and public eloquence.
+      </p>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1.25rem;">
+        <a href="#profile" class="btn-antigravity" style="padding: 1rem 2.2rem; font-size: 1rem;">
+          <span>Explore My Journey</span>
+          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.9rem;"></i>
+        </a>
+
+        <a href="#skills" style="padding: 0.95rem 2rem; font-size: 0.95rem; font-weight: 600; color: #f8fafc; text-decoration: none; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); display: inline-flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease;">
+          <i class="fa-solid fa-compass" style="color: #1e90ff;"></i>
+          <span>Discover Vision</span>
+        </a>
+      </div>
+
+      <div class="metrics-bar">
+        <div>
+          <div class="gold-gradient-text" style="font-size: 2.2rem; font-weight: 800;">10+ Years</div>
+          <div style="color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Educational Leadership</div>
+        </div>
+        <div>
+          <div class="blue-gradient-text" style="font-size: 2.2rem; font-weight: 800;">5,000+</div>
+          <div style="color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Students Mentored</div>
+        </div>
+        <div>
+          <div class="gold-gradient-text" style="font-size: 2.2rem; font-weight: 800;">100+</div>
+          <div style="color: #94a3b8; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Keynotes & Sermons</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profile & Philosophy Section -->
+  <section id="profile">
+    <div class="section-header">
+      <span class="section-tag" style="color: #f5a623;">PROFILE & PHILOSOPHY</span>
+      <h2 class="font-serif gold-gradient-text" style="font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700;">
+        The Visionary Leader
+      </h2>
+      <div style="width: 60px; height: 3px; background: linear-gradient(90deg, #f5a623, #1e90ff); margin: 1rem auto 0 auto; border-radius: 2px;"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 3.5rem; align-items: center;">
+      <!-- Left: 3D Parallax Portrait Card -->
+      <div class="portrait-card-wrapper">
+        <div class="portrait-card" id="portrait-card">
+          <div class="orbit-ring"></div>
+          <div class="portrait-inner">
+            <img src="./public/irshad shamil irfani.jpeg" alt="Irshad Shamil Irfani" class="portrait-img" id="portrait-img" onerror="this.src='./irshad shamil irfani.jpeg'" />
+            <div class="portrait-overlay"></div>
+            <div class="portrait-badge">
+              <div style="color: #ffd700; font-weight: 700; font-size: 1.1rem;">Irshad Shamil Irfani</div>
+              <div style="color: #94a3b8; font-size: 0.85rem;">Principal & Director | Islamic Scholar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Biography Hovering Card -->
+      <div class="glass-card" style="padding: 2.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(245, 166, 35, 0.15); border: 1px solid rgba(245, 166, 35, 0.3); display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-sparkles" style="color: #f5a623;"></i>
+          </div>
+          <div>
+            <h3 style="color: #fff; font-size: 1.4rem; font-weight: 700;">Executive Leadership Profile</h3>
+            <p style="color: #f5a623; font-size: 0.85rem;">Empowering Minds, Inspiring Ethics</p>
+          </div>
+        </div>
+
+        <p style="color: #cbd5e1; font-size: 1.05rem; line-height: 1.8; margin-bottom: 2rem;">
+          A dedicated and visionary educational leader serving as <strong>Principal & Director</strong>, combined with deep commitment as a renowned <strong>Islamic Speaker</strong>. With an established track record in teacher motivation, strategic institutional management, and community enlightenment, Irshad Shamil Irfani bridges classical wisdom with modern educational methodologies to elevate institutions and nurture compassionate, competent leaders of tomorrow.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.25rem;">
+          <div style="padding: 1.2rem; border-radius: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <i class="fa-solid fa-bullseye" style="color: #1e90ff; font-size: 1.3rem; margin-bottom: 0.5rem; display: block;"></i>
+            <div style="color: #fff; font-weight: 600; font-size: 0.95rem;">Strategic Vision</div>
+            <div style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.2rem;">Institutional roadmap & growth.</div>
+          </div>
+          <div style="padding: 1.2rem; border-radius: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <i class="fa-solid fa-chalkboard-user" style="color: #f5a623; font-size: 1.3rem; margin-bottom: 0.5rem; display: block;"></i>
+            <div style="color: #fff; font-weight: 600; font-size: 0.95rem;">Teacher Motivation</div>
+            <div style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.2rem;">Mentoring educators with passion.</div>
+          </div>
+          <div style="padding: 1.2rem; border-radius: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <i class="fa-solid fa-book-open" style="color: #06b6d4; font-size: 1.3rem; margin-bottom: 0.5rem; display: block;"></i>
+            <div style="color: #fff; font-weight: 600; font-size: 0.95rem;">Islamic Speaker</div>
+            <div style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.2rem;">Eloquent moral discourses.</div>
+          </div>
+          <div style="padding: 1.2rem; border-radius: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);">
+            <i class="fa-solid fa-laptop-code" style="color: #ffd700; font-size: 1.3rem; margin-bottom: 0.5rem; display: block;"></i>
+            <div style="color: #fff; font-weight: 600; font-size: 0.95rem;">EdTech Integration</div>
+            <div style="color: #94a3b8; font-size: 0.8rem; margin-top: 0.2rem;">Modern digital systems.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Skills & Leadership Section -->
+  <section id="skills">
+    <div class="section-header">
+      <span class="section-tag" style="color: #1e90ff;">CORE COMPETENCIES</span>
+      <h2 class="font-serif gold-gradient-text" style="font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700;">
+        Leadership & Expertise
+      </h2>
+      <p style="color: #94a3b8; max-width: 600px; margin: 0.75rem auto 0 auto;">
+        Interactive floating holographic cards showcasing core domains of leadership and public impact.
+      </p>
+    </div>
+
+    <div class="skills-grid" id="skills-container">
+      <!-- Generated via Javascript -->
+    </div>
+  </section>
+
+  <!-- Modal for Skill Details -->
+  <div class="modal-backdrop" id="skill-modal">
+    <div class="glass-card modal-content" id="modal-card">
+      <button id="close-modal" style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255,255,255,0.1); border: none; color: #fff; border-radius: 50%; width: 36px; height: 36px; cursor: pointer;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Languages & Global Reach Section -->
+  <section id="languages">
+    <div class="section-header">
+      <span class="section-tag" style="color: #06b6d4;">THE GLOBAL CITIZEN</span>
+      <h2 class="font-serif gold-gradient-text" style="font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700;">
+        Linguistic Reach & Eloquence
+      </h2>
+      <p style="color: #94a3b8; max-width: 600px; margin: 0.75rem auto 0 auto;">
+        Fluent in four major languages to inspire diverse communities across global and regional spheres.
+      </p>
+    </div>
+
+    <div class="languages-container">
+      <!-- Left: Language Badges -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" id="lang-badges-grid">
+        <!-- JS rendered -->
+      </div>
+
+      <!-- Right: Active Language Details -->
+      <div class="glass-card" style="padding: 2.5rem; border: 1px solid rgba(245, 166, 35, 0.3);" id="lang-detail-card">
+        <!-- JS rendered -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Footer Section -->
+  <footer id="contact" style="position: relative; background: #040710; border-top: 1px solid rgba(245, 166, 35, 0.25); padding: 6rem 1.5rem 2rem 1.5rem; z-index: 2;">
+    <div style="max-width: 1280px; margin: 0 auto;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4rem; margin-bottom: 5rem;">
+        <!-- Left Info -->
+        <div>
+          <span style="color: #f5a623; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; display: block; margin-bottom: 0.5rem;">
+            LET'S CONNECT & COLLABORATE
+          </span>
+          <h2 class="font-serif gold-gradient-text" style="font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 700; margin-bottom: 1.25rem;">
+            Elevate Educational & Moral Horizons
+          </h2>
+          <p style="color: #94a3b8; font-size: 1.05rem; line-height: 1.7; margin-bottom: 2.5rem;">
+            Reach out directly for institutional leadership, keynote addresses, teacher motivation workshops, or youth counseling.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <a href="tel:+919544242498" class="glass-card" style="display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem; text-decoration: none;">
+              <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(245, 166, 35, 0.15); border: 1px solid rgba(245, 166, 35, 0.3); display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-phone" style="color: #f5a623; font-size: 1.2rem;"></i>
+              </div>
+              <div>
+                <div style="color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">Direct Phone / WhatsApp</div>
+                <div style="color: #fff; font-size: 1.1rem; font-weight: 700;">+91 95442 42498</div>
+              </div>
+            </a>
+
+            <a href="mailto:Irshadkkptpba@gmail.com" class="glass-card" style="display: flex; align-items: center; gap: 1.25rem; padding: 1.25rem; text-decoration: none;">
+              <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(30, 144, 255, 0.15); border: 1px solid rgba(30, 144, 255, 0.3); display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-envelope" style="color: #1e90ff; font-size: 1.2rem;"></i>
+              </div>
+              <div>
+                <div style="color: #94a3b8; font-size: 0.8rem; text-transform: uppercase;">Official Email</div>
+                <div style="color: #fff; font-size: 1.1rem; font-weight: 700;">Irshadkkptpba@gmail.com</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Interactive Form -->
+        <div class="glass-card" style="padding: 2.5rem;" id="form-container">
+          <h3 style="color: #fff; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem;">Send a Direct Message</h3>
+          <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.75rem;">Inquire about speaking invitations or institutional advisory.</p>
+
+          <form id="contact-form" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <div>
+              <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 0.4rem;">Your Name *</label>
+              <input type="text" required id="form-name" placeholder="Enter your full name" style="width: 100%; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); color: #fff; outline: none;" />
+            </div>
+            <div>
+              <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 0.4rem;">Email Address *</label>
+              <input type="email" required id="form-email" placeholder="name@example.com" style="width: 100%; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); color: #fff; outline: none;" />
+            </div>
+            <div>
+              <label style="color: #94a3b8; font-size: 0.85rem; display: block; margin-bottom: 0.4rem;">Message / Inquiry *</label>
+              <textarea rows="4" required id="form-msg" placeholder="Share your invitation or inquiry details..." style="width: 100%; padding: 0.85rem 1.1rem; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.12); color: #fff; outline: none; resize: none;"></textarea>
+            </div>
+            <button type="submit" class="btn-antigravity" style="padding: 1rem; font-size: 1rem; margin-top: 0.5rem;">
+              <span>Submit Inquiry</span>
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
+        <div style="color: #64748b; font-size: 0.85rem;">
+          © 2026 Irshad Shamil Irfani. All Rights Reserved. Crafted with Antigravity 3D Metaphor.
+        </div>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="display: flex; align-items: center; gap: 0.5rem; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #94a3b8; padding: 0.5rem 1rem; border-radius: 9999px; cursor: pointer; font-size: 0.85rem;">
+          <span>Ascend to Top</span>
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WebGL Three.js & Logic Script -->
+  <script>
+    // 1. THREE.JS 3D BACKGROUND SCENE
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x060a17, 0.015);
+
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 25;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // Particle System (Upward Flow - Antigravity)
+    const particleCount = 700;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+
+    const colorGold = new THREE.Color(0xf5a623);
+    const colorBlue = new THREE.Color(0x1e90ff);
+    const colorCyan = new THREE.Color(0x06b6d4);
+
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 60;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 60;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+
+      const r = Math.random();
+      const mixedColor = r > 0.6 ? colorGold : r > 0.3 ? colorBlue : colorCyan;
+      colors[i * 3] = mixedColor.r;
+      colors[i * 3 + 1] = mixedColor.g;
+      colors[i * 3 + 2] = mixedColor.b;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    // Particle Texture
+    const canvasMat = document.createElement('canvas');
+    canvasMat.width = 32; canvasMat.height = 32;
+    const ctx = canvasMat.getContext('2d');
+    const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+    grad.addColorStop(0, 'rgba(255,255,255,1)');
+    grad.addColorStop(0.4, 'rgba(255,255,255,0.7)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(16, 16, 16, 0, Math.PI * 2); ctx.fill();
+
+    const particleTexture = new THREE.CanvasTexture(canvasMat);
+    const particleMaterial = new THREE.PointsMaterial({
+      size: 0.45,
+      vertexColors: true,
+      map: particleTexture,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const particleSystem = new THREE.Points(geometry, particleMaterial);
+    scene.add(particleSystem);
+
+    // 3D Geometric Floating Objects
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const icoGeo = new THREE.IcosahedronGeometry(8, 2);
+    const icoMat = new THREE.MeshBasicMaterial({ color: 0x1e90ff, wireframe: true, transparent: true, opacity: 0.15 });
+    const icoMesh = new THREE.Mesh(icoGeo, icoMat);
+    group.add(icoMesh);
+
+    const ringGeo = new THREE.TorusGeometry(12, 0.04, 16, 100);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0xf5a623, transparent: true, opacity: 0.3 });
+    const ring1 = new THREE.Mesh(ringGeo, ringMat);
+    ring1.rotation.x = Math.PI / 3;
+    group.add(ring1);
+
+    const ring2 = new THREE.Mesh(ringGeo, ringMat);
+    ring2.rotation.y = Math.PI / 4; ring2.rotation.x = -Math.PI / 6;
+    group.add(ring2);
+
+    let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX - window.innerWidth / 2) * 0.001;
+      mouseY = (e.clientY - window.innerHeight / 2) * 0.001;
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const elapsedTime = clock.getElapsedTime();
+
+      targetX += (mouseX - targetX) * 0.05;
+      targetY += (mouseY - targetY) * 0.05;
+
+      group.rotation.y = elapsedTime * 0.08 + targetX * 2;
+      group.rotation.x = Math.sin(elapsedTime * 0.05) * 0.1 + targetY * 2;
+
+      ring1.rotation.z = elapsedTime * 0.1;
+      ring2.rotation.z = -elapsedTime * 0.12;
+
+      const posAttr = particleSystem.geometry.attributes.position;
+      for (let i = 0; i < particleCount; i++) {
+        let y = posAttr.getY(i);
+        y += 0.04;
+        if (y > 30) y = -30;
+        posAttr.setY(i, y);
+      }
+      posAttr.needsUpdate = true;
+
+      camera.position.x += (targetX * 5 - camera.position.x) * 0.05;
+      camera.position.y += (-targetY * 5 - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // 2. 3D PARALLAX PORTRAIT CARD EFFECT
+    const portraitCard = document.getElementById('portrait-card');
+    if (portraitCard) {
+      portraitCard.addEventListener('mousemove', (e) => {
+        const rect = portraitCard.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        portraitCard.style.transform = `rotateX(${-y * 0.05}deg) rotateY(${x * 0.05}deg)`;
+      });
+      portraitCard.addEventListener('mouseleave', () => {
+        portraitCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      });
+    }
+
+    // 3. SKILLS DATA & RENDER
+    const skills = [
+      {
+        id: 'leadership',
+        title: 'Educational Leadership',
+        icon: 'fa-award',
+        category: 'Executive Management',
+        color: '#f5a623',
+        short: 'Directing academic vision, institutional strategy, and administrative excellence.',
+        desc: 'Proven capability heading educational institutions as Principal & Director. Architecting long-term academic roadmaps, optimizing organizational workflows, and fostering an environment of continuous growth.',
+        pillars: ['Institutional Governance', 'Strategic Planning', 'Policy Formulation', 'Quality Assurance']
+      },
+      {
+        id: 'motivation',
+        title: 'Teacher Motivation',
+        icon: 'fa-chalkboard-user',
+        category: 'Faculty Coaching',
+        color: '#1e90ff',
+        short: 'Inspiring educators through impactful workshops, coaching, and growth mindsets.',
+        desc: 'Empowering faculty through structured professional development, empathy-driven leadership, and motivational seminars that reignite passion for teaching and student engagement.',
+        pillars: ['Faculty Mentorship', 'Performance Coaching', 'Interactive Workshops', 'Pedagogy Elevation']
+      },
+      {
+        id: 'speaker',
+        title: 'Islamic Speaker',
+        icon: 'fa-book-open-reader',
+        category: 'Public Eloquence',
+        color: '#ffd700',
+        short: 'Delivering inspiring keynotes on faith, ethics, and youth guidance.',
+        desc: 'Renowned for captivating discourses that bridge traditional Islamic jurisprudence and modern challenges. Addressing youth, families, and academic gatherings with clarity and moral vision.',
+        pillars: ['Keynote Addresses', 'Youth Counseling', 'Moral Philosophy', 'Community Leadership']
+      },
+      {
+        id: 'technology',
+        title: 'Computer & EdTech',
+        icon: 'fa-laptop-code',
+        category: 'Digital Systems',
+        color: '#06b6d4',
+        short: 'Integrating digital tools, software platforms, and modern administration.',
+        desc: 'Proficient across modern digital productivity tools, school management software, presentation media, and e-learning systems to streamline operations and enhance learning.',
+        pillars: ['School Management Tools', 'E-Learning Systems', 'Data Management', 'IT Infrastructure']
+      },
+      {
+        id: 'curriculum',
+        title: 'Curriculum Design',
+        icon: 'fa-book-bookmark',
+        category: 'Academic Pedagogy',
+        color: '#a855f7',
+        short: 'Designing holistic curricula integrating moral values with academic rigor.',
+        desc: 'Developing balanced educational frameworks that pair rigorous academic subjects with value-based character building, ensuring well-rounded student development.',
+        pillars: ['Holistic Syllabus', 'Value-Based Learning', 'Assessment Models', 'Student Engagement']
+      },
+      {
+        id: 'mentorship',
+        title: 'Youth Mentorship',
+        icon: 'fa-compass',
+        category: 'Character Guidance',
+        color: '#ec4899',
+        short: 'Guiding young minds toward academic ambition, moral strength, and purpose.',
+        desc: 'Providing compassionate guidance to students and young leaders, helping them navigate life choices, career trajectories, and spiritual grounding.',
+        pillars: ['Career Counseling', 'Character Development', 'Leadership Academies', 'Personal Growth']
+      }
+    ];
+
+    const skillsContainer = document.getElementById('skills-container');
+    skills.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'glass-card skill-card';
+      card.onclick = () => openSkillModal(s);
+      card.innerHTML = `
+        <div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
+            <div style="width:48px; height:48px; border-radius:16px; background:${s.color}20; border:1px solid ${s.color}50; display:flex; align-items:center; justify-content:center;">
+              <i class="fa-solid ${s.icon}" style="color:${s.color}; font-size:1.3rem;"></i>
+            </div>
+            <span style="font-size:0.75rem; font-weight:700; color:${s.color}; text-transform:uppercase; letter-spacing:0.1em; padding:0.3rem 0.8rem; border-radius:9999px; background:rgba(255,255,255,0.05);">${s.category}</span>
+          </div>
+          <h3 style="color:#f8fafc; font-size:1.3rem; font-weight:700; margin-bottom:0.75rem;">${s.title}</h3>
+          <p style="color:#94a3b8; font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">${s.short}</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:0.4rem; color:${s.color}; font-weight:600; font-size:0.85rem;">
+          <span>Discover Core Insights</span>
+          <i class="fa-solid fa-chevron-right" style="font-size:0.75rem;"></i>
+        </div>
+      `;
+      skillsContainer.appendChild(card);
+    });
+
+    const modalBackdrop = document.getElementById('skill-modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeModalBtn = document.getElementById('close-modal');
+
+    function openSkillModal(s) {
+      modalBody.innerHTML = `
+        <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+          <div style="width:56px; height:56px; border-radius:20px; background:${s.color}25; border:1px solid ${s.color}; display:flex; align-items:center; justify-content:center;">
+            <i class="fa-solid ${s.icon}" style="color:${s.color}; font-size:1.6rem;"></i>
+          </div>
+          <div>
+            <h3 style="color:#fff; font-size:1.6rem; font-weight:700;">${s.title}</h3>
+            <span style="color:${s.color}; font-size:0.85rem; font-weight:600;">${s.category}</span>
+          </div>
+        </div>
+        <p style="color:#cbd5e1; font-size:1.05rem; line-height:1.8; margin-bottom:2rem;">${s.desc}</p>
+        <div style="margin-bottom:1.5rem;">
+          <h4 style="color:#fff; font-size:1rem; font-weight:700; margin-bottom:0.75rem;">Key Pillars & Focus Areas</h4>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+            ${s.pillars.map(p => `
+              <div style="display:flex; align-items:center; gap:0.5rem; color:#94a3b8; font-size:0.9rem; padding:0.6rem 1rem; border-radius:10px; background:rgba(255,255,255,0.03);">
+                <i class="fa-solid fa-sparkles" style="color:${s.color}; font-size:0.8rem;"></i>
+                <span>${p}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <button class="btn-antigravity" onclick="closeSkillModal()" style="width:100%; padding:0.9rem; font-size:0.95rem; margin-top:1rem;">Close Insights</button>
+      `;
+      modalBackdrop.classList.add('active');
+    }
+
+    function closeSkillModal() {
+      modalBackdrop.classList.remove('active');
+    }
+    closeModalBtn.onclick = closeSkillModal;
+    modalBackdrop.onclick = (e) => { if (e.target === modalBackdrop) closeSkillModal(); };
+
+    // 4. LANGUAGES RENDER
+    const languages = [
+      {
+        code: 'en',
+        name: 'English',
+        native: 'English',
+        fluency: 'Full Professional Proficiency',
+        role: 'Academic Instruction & Global Discourse',
+        quote: 'Connecting global scholarship with visionary educational standards.',
+        gradient: 'linear-gradient(135deg, #1e90ff, #3b82f6)'
+      },
+      {
+        code: 'ml',
+        name: 'Malayalam',
+        native: 'മലയാളം',
+        fluency: 'Native / Bilingual Mastery',
+        role: 'Keynotes & Regional Institutional Leadership',
+        quote: 'ഹൃദയസ്പർശിയായ പ്രഭാഷണങ്ങളിലൂടെ ജനമനസ്സുകളെ ഉണർത്തുന്നു.',
+        gradient: 'linear-gradient(135deg, #f5a623, #ffd700)'
+      },
+      {
+        code: 'ta',
+        name: 'Tamil',
+        native: 'தமிழ்',
+        fluency: 'Professional Eloquence',
+        role: 'Community Outreach & Discourse',
+        quote: 'அறிவும் அறமும் இணைந்த சமூக வழிகாட்டல்.',
+        gradient: 'linear-gradient(135deg, #06b6d4, #3b82f6)'
+      },
+      {
+        code: 'ar',
+        name: 'Arabic',
+        native: 'العربية',
+        fluency: 'Scholarly & Classical Mastery',
+        role: 'Islamic Jurisprudence & Scriptural Interpretation',
+        quote: 'العلم والتربية لإعداد أجيال نيرة بالفكر والأخلاق.',
+        gradient: 'linear-gradient(135deg, #10b981, #059669)'
+      }
+    ];
+
+    let currentLang = languages[0];
+    const badgesGrid = document.getElementById('lang-badges-grid');
+    const detailCard = document.getElementById('lang-detail-card');
+
+    function renderLanguages() {
+      badgesGrid.innerHTML = '';
+      languages.forEach(l => {
+        const isActive = l.code === currentLang.code;
+        const b = document.createElement('div');
+        b.className = `lang-badge ${isActive ? 'active' : ''}`;
+        b.onclick = () => { currentLang = l; renderLanguages(); };
+        b.innerHTML = `
+          ${isActive ? '<div style="position:absolute; top:0.75rem; right:0.75rem; width:10px; height:10px; border-radius:50%; background:#ffd700; box-shadow:0 0 10px #ffd700;"></div>' : ''}
+          <div style="font-size:1.8rem; font-weight:700; color:#fff; font-family:${l.code==='ar'?'var(--font-arabic)':'var(--font-sans)'}; margin-bottom:0.5rem;">${l.native}</div>
+          <div style="color:#ffd700; font-weight:700; font-size:1.1rem;">${l.name}</div>
+          <div style="color:#94a3b8; font-size:0.8rem; margin-top:0.25rem;">${l.fluency}</div>
+        `;
+        badgesGrid.appendChild(b);
+      });
+
+      detailCard.innerHTML = `
+        <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+          <div style="width:50px; height:50px; border-radius:16px; background:${currentLang.gradient}; display:flex; align-items:center; justify-content:center;">
+            <i class="fa-solid fa-globe" style="color:#060a17; font-size:1.4rem;"></i>
+          </div>
+          <div>
+            <h3 style="color:#fff; font-size:1.5rem; font-weight:700;">${currentLang.name} (${currentLang.native})</h3>
+            <p style="color:#f5a623; font-size:0.85rem; font-weight:600;">${currentLang.role}</p>
+          </div>
+        </div>
+
+        <div style="padding:1.5rem; border-radius:16px; background:rgba(255,255,255,0.03); border-left:4px solid #f5a623; margin-bottom:1.75rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem; color:#ffd700; margin-bottom:0.5rem;">
+            <i class="fa-solid fa-quote-left"></i>
+            <span style="font-size:0.85rem; font-weight:700; text-transform:uppercase;">Sample Expression</span>
+          </div>
+          <p style="color:#f8fafc; font-size:${currentLang.code==='ar'?'1.4rem':'1.1rem'}; font-family:${currentLang.code==='ar'?'var(--font-arabic)':'var(--font-sans)'}; font-style:${currentLang.code==='ar'?'normal':'italic'}; line-height:1.6;">
+            "${currentLang.quote}"
+          </p>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; color:#94a3b8; font-size:0.85rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <i class="fa-solid fa-sparkles" style="color:#06b6d4;"></i>
+            <span>Multi-Lingual Public Address</span>
+          </div>
+          <span style="color:#ffd700; font-weight:600;">Mastery Grade</span>
+        </div>
+      `;
+    }
+    renderLanguages();
+
+    // 5. CONTACT FORM SUBMIT & CONFETTI
+    const contactForm = document.getElementById('contact-form');
+    const formContainer = document.getElementById('form-container');
+
+    contactForm.onsubmit = (e) => {
+      e.preventDefault();
+      const name = document.getElementById('form-name').value;
+      
+      formContainer.innerHTML = `
+        <div style="text-align:center; padding:3rem 1.5rem; border-radius:20px; background:rgba(245,166,35,0.1); border:1px solid rgba(245,166,35,0.3);">
+          <i class="fa-solid fa-circle-check" style="color:#ffd700; font-size:3.2rem; margin-bottom:1rem; display:block;"></i>
+          <h4 style="color:#fff; font-size:1.4rem; font-weight:700; margin-bottom:0.5rem;">Message Transmitted!</h4>
+          <p style="color:#cbd5e1; font-size:0.95rem;">Thank you, ${name}. Your message has been sent directly to Irshad Shamil Irfani.</p>
+        </div>
+      `;
+
+      if (window.confetti) {
+        confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 }, colors: ['#f5a623', '#ffd700', '#1e90ff'] });
+      }
+    };
+
+    // Mobile menu toggle
+    const mobileBtn = document.getElementById('mobile-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileBtn.onclick = () => mobileMenu.classList.toggle('active');
+  </script>
+</body>
+</html>
