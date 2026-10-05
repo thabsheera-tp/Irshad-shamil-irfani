@@ -86,7 +86,7 @@ export default function Navbar() {
               IRSHAD SHAMIL
             </div>
             <div style={{ color: '#f5a623', fontSize: '0.7rem', letterSpacing: '0.15em', fontWeight: '600' }}>
-              ISLAMIC HEAD
+              FOUNDER OF HANOON ACADEMY
             </div>
           </div>
         </a>
